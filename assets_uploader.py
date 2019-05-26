@@ -27,6 +27,7 @@ for file_path in assets_path:
         with open(file_path, 'r', encoding='utf8') as f:
             data = json.load(f)
 
+
         checksum = generate_file_md5(file_path)
         existing_version = client.blackfalcon.files.find_one({"filename": file.replace('.json', '')})
         if existing_version is not None:
