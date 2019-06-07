@@ -50,7 +50,7 @@ def generate():
     output.update({str(uid): 'Animaux' for uid in pets})
     output.update({str(uid): 'Equipements' for uid in equipment})
 
-    with open('output/Id2Hdv.json', 'w') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Id2Hdv.json')), 'w') as f:
         json.dump(output, f)
 
     output = {
