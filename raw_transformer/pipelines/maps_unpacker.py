@@ -37,7 +37,7 @@ def format_cells(cells):
 
 
 def get_interactives(elements):
-    with open('static_data/interactives.json', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../static_data/interactives.json')), 'r') as f:
         interactives = json.load(f)
     for cell in elements:
         for element in cell['elements']:
@@ -61,11 +61,11 @@ def generate_map_info():
     :return:
     """
     maps = []
-    for root, dir, files in os.walk('partially_unpacked_maps'):
+    for root, dir, files in os.walk(os.path.abspath(os.path.join(os.path.dirname(__file__), '../partially_unpacked_maps'))):
         for file in files:
             maps.append(root + '/' + file)
 
-    with open('output/MapPositions.json', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/MapPositions.json')), 'r') as f:
         map_positions = json.load(f)
     map_positions_with_key = {}
     for map in map_positions:
@@ -90,5 +90,5 @@ def generate_map_info():
     # Got to split it for it to fit in mongoDB
     n_splits = ceil(len(json.dumps(map_info)) / 10000000)
     for i in range(n_splits):
-        with open('definitive_output/map_info_{}.json'.format(i), 'w', encoding='utf8') as f:
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(map_info[i * (len(data) // n_splits): (i + 1) * (len(data) // n_splits)], f, ensure_ascii=False)

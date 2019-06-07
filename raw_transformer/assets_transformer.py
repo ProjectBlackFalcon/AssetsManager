@@ -1,6 +1,7 @@
 import sys
-sys.path.insert(0, '../PyDofus_mod')
-sys.path.insert(0, '../raw_transformer')
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'PyDofus_mod')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'raw_transformer')))
 import argparse
 import os
 
@@ -38,9 +39,9 @@ for root, dirs, files in files:
             files_paths['ele'].append(root + '/' + file)
 
 d2o_unpack.unpack(files_paths=files_paths['d2o'])  # Items, Recipes, Effects...
-d2p_unpack.unpack(files_paths=files_paths['d2p'], output='partially_unpacked_maps/')
+d2p_unpack.unpack(files_paths=files_paths['d2p'])
 d2i_unpack.unpack(files_paths=files_paths['d2i'])  # i18n_fr
-ele_unpack.unpack(files_paths=files_paths['d2i'])
+# ele_unpack.unpack(files_paths=files_paths['ele'])
 
 itemid_to_itemiconid.generate()
 maps_unpacker.generate_map_info()

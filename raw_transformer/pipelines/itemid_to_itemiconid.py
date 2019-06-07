@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def generate():
@@ -7,12 +8,12 @@ def generate():
 
     :return: None
     """
-    with open('output/Items.json', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Items.json')), 'r') as f:
         data = json.load(f)
 
     output = []
     for item in data:
         output.append({'id': item['id'], 'iconId': item['iconId']})
 
-    with open('definitive_output/itemid_to_itemiconid.json', 'w') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/itemid_to_itemiconid.json')), 'w') as f:
         json.dump(output, f)

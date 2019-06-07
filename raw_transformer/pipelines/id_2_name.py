@@ -10,14 +10,14 @@ def generate():
 
     :return: None
     """
-    with open('output/Items.json', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Items.json')), 'r') as f:
         items = json.load(f)
 
     id_nameids = {}
     for item in items:
         id_nameids[str(item['id'])] = item['nameId']
 
-    with open('output/i18n_fr.json', 'r', encoding='utf8') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/i18n_fr.json')), 'r', encoding='utf8') as f:
         texts = json.load(f)['texts']
 
     id_2_names = {}
@@ -28,7 +28,7 @@ def generate():
         except:
             pass
 
-    with open('definitive_output/id_2_names.json', 'w', encoding='utf8') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/id_2_names.json')), 'w', encoding='utf8') as f:
         json.dump(id_2_names, f, ensure_ascii=False)
 
 

@@ -6,10 +6,10 @@ from pydofus.swl import SWLReader, InvalidSWLFile
 # folder output: ./output/{all files}.d2p
 
 path_input = "./input/"
-path_output = "./output/"
+path_output = os.path.join(os.path.dirname(__file__), "./output/")
 
 
-def unpack(files_paths='./input/', output="./output/"):
+def unpack(files_paths='./input/', output=os.path.abspath(os.path.join(os.path.dirname(__file__), "../raw_transformer/partially_unpacked_maps/"))):
     path_output = output
 
     for file_path in files_paths:
@@ -17,9 +17,9 @@ def unpack(files_paths='./input/', output="./output/"):
         d2p_file = open(file_path, "rb")
 
         try:
-            os.stat(path_output + file_name[:-4])
+            os.stat(path_output + "/" + file_name[:-4])
         except:
-            os.mkdir(path_output + file_name[:-4])
+            os.makedirs(path_output + "/" + file_name[:-4])
 
         print("D2P Unpacker for " + file_name)
 
@@ -30,16 +30,16 @@ def unpack(files_paths='./input/', output="./output/"):
                 # print("extract file " + file_name + "/" + name)
 
                 try:
-                    os.stat(path_output + file_name[:-4] + "/" + os.path.dirname(name))
+                    os.stat(path_output + "/" + file_name[:-4] + "/" + os.path.dirname(name))
                 except:
-                    os.makedirs(path_output + file_name[:-4] + "/" + os.path.dirname(name))
+                    os.makedirs(path_output + "/" + file_name[:-4] + "/" + os.path.dirname(name))
 
                 if "swl" in name:
                     swl = io.BytesIO(specs["binary"])
                     swl_reader = SWLReader(swl)
 
-                    swf_output = open(path_output + file_name[:-4] + "/" + name.replace("swl", "swf"), "wb")
-                    json_output = open(path_output + file_name[:-4] + "/" + name.replace("swl", "json"), "w")
+                    swf_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "swf"), "wb")
+                    json_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "json"), "w")
 
                     swf_output.write(swl_reader.SWF)
                     swl_data = {'version':swl_reader.version, 'frame_rate':swl_reader.frame_rate, 'classes':swl_reader.classes}
@@ -48,7 +48,7 @@ def unpack(files_paths='./input/', output="./output/"):
                     swf_output.close()
                     json_output.close()
                 else:
-                    file_output = open(path_output + file_name[:-4] + "/" + name, "wb")
+                    file_output = open(path_output + "/" + file_name[:-4] + "/" + name, "wb")
                     file_output.write(specs["binary"])
                     file_output.close()
                 pass

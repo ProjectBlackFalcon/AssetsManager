@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def generate():
@@ -7,15 +8,15 @@ def generate():
 
     :return: None
     """
-    with open('output/ItemTypes.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/ItemTypes.json')), 'r', encoding="utf8") as f:
         old_item_types = json.load(f)
     item_types = {}
     for item_type in old_item_types:
         item_types[item_type['id']] = item_type
 
-    with open('output/Items.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Items.json')), 'r', encoding="utf8") as f:
         items = json.load(f)
-    with open('output/i18n_fr.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/i18n_fr.json')), 'r', encoding="utf8") as f:
         names = json.load(f)['texts']
 
     name_set = set([])
@@ -60,7 +61,7 @@ def generate():
         'Equipements': equipment,
     }
     print(len(runes) + len(consumables) + len(resources) + len(pets) + len(equipment))
-    with open('definitive_output/hdv_2_id.json', 'w', encoding='utf8') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/hdv_2_id.json')), 'w', encoding='utf8') as f:
         json.dump(output, f, ensure_ascii=False)
 
 

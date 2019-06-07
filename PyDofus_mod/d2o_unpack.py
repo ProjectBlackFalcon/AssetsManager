@@ -5,10 +5,11 @@ from pydofus.d2o import D2OReader, InvalidD2OFile
 # python d2o_unpack.py (all files in input folder)
 # folder output: ./output/{all files}
 
-path_output = "./output/"
+path_output = os.path.join(os.path.dirname(__file__), "../raw_transformer/output/")
 
 
 def unpack(files_paths='./input/'):
+    print(path_output)
     for file_path in files_paths:
         file_name = file_path.split('/')[-1]
         d2p_file = open(file_path, "rb")

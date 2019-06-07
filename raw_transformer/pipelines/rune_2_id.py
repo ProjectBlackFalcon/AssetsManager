@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def generate():
@@ -7,7 +8,7 @@ def generate():
 
     :return: None
     """
-    with open('definitive_output/id_2_names.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/id_2_names.json')), 'r', encoding="utf8") as f:
         ids = json.load(f)
 
     runes_ids = {}
@@ -16,5 +17,5 @@ def generate():
             runes_ids[name] = int(item_id)
             print(item_id, name)
 
-    with open('definitive_output/rune_2_id.json', 'w', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/rune_2_id.json')), 'w', encoding="utf8") as f:
         json.dump(runes_ids, f, ensure_ascii=False)

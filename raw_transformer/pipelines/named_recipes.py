@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def generate():
@@ -15,10 +16,10 @@ def generate():
 
     :return: None
     """
-    with open('output/i18n_fr.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/i18n_fr.json')), 'r', encoding="utf8") as f:
         names = json.load(f)['texts']
 
-    with open('output/Recipes.json', 'r') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Recipes.json')), 'r') as f:
         recipes = json.load(f)
 
     new_recipes = []
@@ -32,5 +33,5 @@ def generate():
             del recipe['skillId']
             new_recipes.append(recipe)
 
-    with open('definitive_output/named_recipes.json', 'w', encoding='utf8') as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/named_recipes.json')), 'w', encoding='utf8') as f:
         json.dump(new_recipes, f, ensure_ascii=False)

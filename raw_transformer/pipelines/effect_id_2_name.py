@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def generate():
@@ -7,13 +8,13 @@ def generate():
 
     :return: None
     """
-    with open('output/i18n_fr.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/i18n_fr.json')), 'r', encoding="utf8") as f:
         names = json.load(f)['texts']
 
-    with open('output/Effects.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Effects.json')), 'r', encoding="utf8") as f:
         old_stats = json.load(f)
 
-    with open('output/Items.json', 'r', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/Items.json')), 'r', encoding="utf8") as f:
         items = json.load(f)
 
     items_effect_ids = set([])
@@ -36,5 +37,5 @@ def generate():
         except:
             pass
 
-    with open('definitive_output/effect_id_2_name.json', 'w', encoding="utf8") as f:
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/effect_id_2_name.json')), 'w', encoding="utf8") as f:
         json.dump(output, f, ensure_ascii=False)

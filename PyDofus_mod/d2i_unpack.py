@@ -6,7 +6,7 @@ from pydofus.d2i import D2I, InvalidD2IFile
 # file output: file.json
 
 path_input = "./input/"
-path_output = "./output/"
+path_output = os.path.join(os.path.dirname(__file__), "./output/")
 
 
 def unpack(files_paths='./input/'):
