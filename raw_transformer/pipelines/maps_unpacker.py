@@ -1,5 +1,7 @@
 import os
 import json
+import time
+
 import dlm_unpack
 from math import ceil
 
@@ -37,11 +39,11 @@ def format_cells(cells):
 
 
 def get_interactives(elements):
-    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../static_data/interactives.json')), 'r') as f:
-        interactives = json.load(f)
+    formatted_elements = {}
     for cell in elements:
         for element in cell['elements']:
-            pass
+            formatted_elements[element['elementId']] = {'cell': cell['cellId']}
+    return formatted_elements
 
 
 def generate_map_info():
@@ -55,7 +57,8 @@ def generate_map_info():
         'subAreaid': I'm not sure we even use this,
         'worldMap': As an int. 1 is the normal world, the others I don't remember right now,
         'hasPriorityOnWorldMap': The maps you want usually have this set to 'True',
-        'cells': a 40 lines by 14 columns matrix of int representing the map. 0 is walkable, 1 is void, 2 is a los blocking obstacle, 3 are invalid squares for changing maps.
+        'cells': a 40 lines by 14 columns matrix of int representing the map. 0 is walkable, 1 is void, 2 is a los blocking obstacle, 3 are invalid squares for changing maps,
+        'interactives': {elementId: {cell: 0}, }
     }
 
     :return:
@@ -63,7 +66,8 @@ def generate_map_info():
     maps = []
     for root, dir, files in os.walk(os.path.abspath(os.path.join(os.path.dirname(__file__), '../partially_unpacked_maps'))):
         for file in files:
-            maps.append(root + '/' + file)
+            if file.endswith('.dlm'):
+                maps.append(root + '/' + file)
 
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/MapPositions.json')), 'r') as f:
         map_positions = json.load(f)
@@ -88,7 +92,7 @@ def generate_map_info():
         map_info.append(map_data)
 
     # Got to split it for it to fit in mongoDB
-    n_splits = ceil(len(json.dumps(map_info)) / 10000000)
+    n_splits = ceil(len(json.dumps(map_info)) / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
-            json.dump(map_info[i * (len(data) // n_splits): (i + 1) * (len(data) // n_splits)], f, ensure_ascii=False)
+            json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
