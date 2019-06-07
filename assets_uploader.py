@@ -35,8 +35,16 @@ for file_path in assets_path:
             else:
                 print('Updating {}'.format(file))
                 client.blackfalcon.files.find_one_and_replace({"filename": file.replace('.json', '')}, {'filename': file.replace('.json', ''), 'payload': data})
+                stored_file = client.blackfalcon.files.find_one({"filename": file.replace('.json', '')})
+                with open('tmp/_', 'w', encoding='utf-8') as f:
+                    json.dump(stored_file['payload'], f, ensure_ascii=False)
+                checksum = generate_file_md5('tmp/_')
                 client.blackfalcon.checksums.find_one_and_replace({"filename": file.replace('.json', '')}, {'filename': file.replace('.json', ''), 'checksum_md5': checksum})
         else:
             print('Creating {}'.format(file))
             client.blackfalcon.files.insert_one({'filename': file.replace('.json', ''), 'payload': data})
+            stored_file = client.blackfalcon.files.find_one({"filename": file.replace('.json', '')})
+            with open('tmp/_', 'w', encoding='utf-8') as f:
+                f.write(stored_file)
+            checksum = generate_file_md5('tmp/_')
             client.blackfalcon.checksums.insert_one({'filename': file.replace('.json', ''), 'checksum_md5': checksum})

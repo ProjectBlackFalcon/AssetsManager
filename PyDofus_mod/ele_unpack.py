@@ -2,15 +2,16 @@ import sys, json
 from pydofus.ele import ELE, InvalidELEFile
 
 
-def unpack_ele(file):
-    with open(file, "rb") as f:
-        ele = ELE(f)
-        data = ele.read()
+def unpack_ele(files_paths):
+    for file_path in files_paths:
+        with open(file_path, "rb") as f:
+            ele = ELE(f)
+            data = ele.read()
 
-    data_stripped = {}
-    for element_id, values in data['elements_map'].items():
-        if dict(values)['type'] == 0:
-            data_stripped[element_id] = dict(values)['gfx_id']
+        with open('output/elements.json', "w") as f:
+            json.dump(data, f, indent=2)
 
-    with open('elem2gfx.json', "w") as f:
-        json.dump(data_stripped, f, indent=2)
+if __name__ == '__main__':
+    import os
+    print(os.getcwd())
+    unpack_ele(['../raw_transformer/input/elements.ele'])

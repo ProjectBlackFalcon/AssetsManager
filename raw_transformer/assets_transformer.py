@@ -7,6 +7,7 @@ import os
 import d2o_unpack
 import d2i_unpack
 import d2p_unpack
+import ele_unpack
 
 from pipelines import named_recipes
 from pipelines import id_2_hdv
@@ -23,7 +24,7 @@ parser = argparse.ArgumentParser(description='Assets Transformer')
 parser.add_argument('dofusdir', type=str, help='Dofus root directory')
 root = parser.parse_args().dofusdir
 
-files_paths = {'d2i': [], 'd2o': [], 'd2p': []}
+files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
 files = os.walk(root)
 for root, dirs, files in files:
     for file in files:
@@ -33,10 +34,13 @@ for root, dirs, files in files:
             files_paths['d2o'].append(root + '/' + file)
         if file.endswith('d2p'):
             files_paths['d2p'].append(root + '/' + file)
+        if file.endswith('ele'):
+            files_paths['ele'].append(root + '/' + file)
 
 d2o_unpack.unpack(files_paths=files_paths['d2o'])  # Items, Recipes, Effects...
 d2p_unpack.unpack(files_paths=files_paths['d2p'], output='partially_unpacked_maps/')
 d2i_unpack.unpack(files_paths=files_paths['d2i'])  # i18n_fr
+ele_unpack.unpack(files_paths=files_paths['d2i'])
 
 itemid_to_itemiconid.generate()
 maps_unpacker.generate_map_info()

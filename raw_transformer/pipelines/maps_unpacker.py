@@ -36,6 +36,14 @@ def format_cells(cells):
     return output
 
 
+def get_interactives(elements):
+    with open('static_data/interactives.json', 'r') as f:
+        interactives = json.load(f)
+    for cell in elements:
+        for element in cell['elements']:
+            pass
+
+
 def generate_map_info():
     """
     Outputs a list of maps characteristics. As this list is too big to fit in mongo, we split it into multiple map_info_n.json
@@ -66,7 +74,7 @@ def generate_map_info():
     map_info = []
     for map in maps:
         data = dlm_unpack.unpack_dlm(map)
-        map_id, cells = data['mapId'], data['cells']
+        map_id, cells, elements = data['mapId'], data['cells'], data['layers'][0]['cells']
         print('Generating data for map {} {};{}'.format(str(maps.index(map)) + '/' + str(len(maps)-1), map_positions_with_key[map_id]['posX'], map_positions_with_key[map_id]['posY']))
         map_data = {
             'id': map_id,
@@ -74,7 +82,8 @@ def generate_map_info():
             'subAreaid': map_positions_with_key[map_id]['subAreaId'],
             'worldMap': map_positions_with_key[map_id]['worldMap'],
             'hasPriorityOnWorldMap': map_positions_with_key[map_id]['hasPriorityOnWorldmap'],
-            'cells': format_cells(cells)
+            'cells': format_cells(cells),
+            'interactives': get_interactives(elements)
         }
         map_info.append(map_data)
 
