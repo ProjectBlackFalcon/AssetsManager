@@ -76,6 +76,7 @@ def generate_map_info():
         map_positions_with_key[map['id']] = map
 
     map_info = []
+    elements_info = {}
     for map in maps:
         data = dlm_unpack.unpack_dlm(map)
         map_id, cells, elements = data['mapId'], data['cells'], data['layers'][0]['cells']
@@ -86,13 +87,18 @@ def generate_map_info():
             'subAreaid': map_positions_with_key[map_id]['subAreaId'],
             'worldMap': map_positions_with_key[map_id]['worldMap'],
             'hasPriorityOnWorldMap': map_positions_with_key[map_id]['hasPriorityOnWorldmap'],
-            'cells': format_cells(cells),
-            'interactives': get_interactives(elements)
+            'cells': format_cells(cells)
         }
         map_info.append(map_data)
+        elements_info[map_id] = get_interactives(elements)
 
     # Got to split it for it to fit in mongoDB
     n_splits = ceil(len(json.dumps(map_info)) / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
+
+    n_splits = ceil(len(json.dumps(elements_info)) / 5000000)
+    for i in range(n_splits):
+        with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/elements_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
+            json.dump(dict(list(elements_info.items())[i * (len(elements_info.keys()) // n_splits): (i + 1) * (len(elements_info.keys()) // n_splits)]), f, ensure_ascii=False)
