@@ -22,11 +22,16 @@ from pipelines import itemid_to_itemiconid
 from pipelines import fmable_stats
 from pipelines import pathfinder_graph
 
-# parser = argparse.ArgumentParser(description='Assets Transformer')
-# parser.add_argument('dofusdir', type=str, help='Dofus root directory')
-# root = parser.parse_args().dofusdir
+parser = argparse.ArgumentParser(description='Assets Transformer')
+parser.add_argument('dofusdir', type=str, help='Dofus root directory')
+root = parser.parse_args().dofusdir
 
-root = 'input'
+# root = 'input'
+
+for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output'))):
+    if file.endswith('.json'):
+        os.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output/') + file))
+
 files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
 files = os.walk(root)
 for root, dirs, files in files:
@@ -43,7 +48,6 @@ for root, dirs, files in files:
 d2o_unpack.unpack(files_paths=files_paths['d2o'])  # Items, Recipes, Effects...
 d2p_unpack.unpack(files_paths=files_paths['d2p'])
 d2i_unpack.unpack(files_paths=files_paths['d2i'])  # i18n_fr
-ele_unpack.unpack(files_paths=files_paths['ele'])
 
 maps_unpacker.generate_map_info()
 pathfinder_graph.generate()

@@ -21,6 +21,15 @@ client = pymongo.MongoClient(host=credentials['mongo']['host'], port=credentials
 assets_path = [os.path.abspath(os.path.join(os.path.dirname(__file__), 'raw_transformer/definitive_output/', file)) for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), 'raw_transformer/definitive_output/')))] + \
               [os.path.abspath(os.path.join(os.path.dirname(__file__), 'raw_transformer/static_data/', file)) for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), 'raw_transformer/static_data/')))]
 
+# Removing files that are no longer needed from Mongo to avoid assets buildup
+local_files = set([os.path.basename(path).replace('.json', '') for path in assets_path if os.path.basename(path).endswith('.json')])
+mongo_files = set([document['filename'] for document in client.blackfalcon.checksums.find({})])
+files_to_remove = mongo_files - local_files
+for file in files_to_remove:
+    print('Removing {} from mongo'.format(file))
+    client.blackfalcon.checksums.delete_one({'filename': file})
+    client.blackfalcon.files.delete_one({'filename': file})
+
 for file_path in assets_path:
     if file_path.endswith('.json'):
         file = os.path.basename(file_path)
