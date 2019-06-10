@@ -3,6 +3,7 @@ from heapq import *
 import os
 import uuid
 import numpy as np
+from math import ceil
 import matplotlib.pyplot as plt
 
 import time
@@ -339,7 +340,7 @@ def generate():
 
     graph = build_graph(map_info, 1, (-40, -67, 27, 51))
 
-    n_splits = np.ceil(len(json.dumps(graph)) / 5000000)
+    n_splits = ceil(len(json.dumps(graph)) / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/pathfinder_graph_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(graph.items())[i * (len(graph.keys()) // n_splits): (i + 1) * (len(graph.keys()) // n_splits)]), f, ensure_ascii=False)
