@@ -10,7 +10,14 @@ def format_cells(cells):
     # 0 Walkable
     # 1 Void
     # 2 Obstacle
-    # 3 invalid for change map
+    # 3 change map north
+    # 4 change map north east
+    # 5 change map east
+    # 6 change map south east
+    # 7 change map south
+    # 8 change map south west
+    # 9 change map west
+    # 10 change map north west
     map_change_cells = [i for i in range(28)] + [i for i in range(560) if i % 14 == 0] + [i for i in range(560) if i % 14 == 13] + [i for i in range(532, 560)]
 
     output = []
@@ -26,8 +33,23 @@ def format_cells(cells):
                 if not cell['los']:
                     value = 2
 
-                if i in map_change_cells:
-                    value = 0 if cell['mapChangeData'] else 3
+                if i in map_change_cells and value == 0:
+                    if cell['mapChangeData'] & 64 > 0:
+                        value = 3
+                    if cell['mapChangeData'] & 1 > 0:
+                        value = 5
+                    if cell['mapChangeData'] & 4 > 0:
+                        value = 7
+                    if cell['mapChangeData'] & 16 > 0:
+                        value = 9
+                    if cell['mapChangeData'] & 64 > 0 and cell['mapChangeData'] & 1 > 0:
+                        value = 4
+                    if cell['mapChangeData'] & 1 > 0 and cell['mapChangeData'] & 4 > 0:
+                        value = 6
+                    if cell['mapChangeData'] & 4 > 0 and cell['mapChangeData'] & 16 > 0:
+                        value = 8
+                    if cell['mapChangeData'] & 16 > 0 and cell['mapChangeData'] & 64 > 0:
+                        value = 10
 
                 cells_pack.append(value)
                 i += 1
@@ -96,6 +118,7 @@ def generate_map_info():
     n_splits = ceil(len(json.dumps(map_info)) / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
+            print('Mapinfo_{} contains indices {} through {}'.format(i, i * (len(map_info) // n_splits), (i + 1) * (len(map_info) // n_splits)))
             json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
 
     n_splits = ceil(len(json.dumps(elements_info)) / 5000000)
