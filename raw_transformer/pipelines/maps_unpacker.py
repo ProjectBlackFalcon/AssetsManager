@@ -18,10 +18,15 @@ def format_cells(cells):
     # 8 change map south west
     # 9 change map west
     # 10 change map north west
-    map_change_cells = [i for i in range(28)] + [i for i in range(560) if i % 14 == 0] + [i for i in range(560) if i % 14 == 13] + [i for i in range(532, 560)]
+    map_change_cells = {
+        'n': [i for i in range(28)],
+        'w': [i for i in range(560) if i % 14 == 0],
+        'e': [i for i in range(560) if i % 14 == 13],
+        's': [i for i in range(532, 560)]
+    }
 
     output = []
-    i = 0
+    cell_id = 0
     for cell_pack_id in range(len(cells) // 14):
         cells_pack = []
         for cell in cells[14 * cell_pack_id: 14 * (cell_pack_id + 1)]:
@@ -33,26 +38,36 @@ def format_cells(cells):
                 if not cell['los']:
                     value = 2
 
-                if i in map_change_cells and value == 0:
-                    if cell['mapChangeData'] & 64 > 0:
-                        value = 3
-                    if cell['mapChangeData'] & 1 > 0:
-                        value = 5
-                    if cell['mapChangeData'] & 4 > 0:
-                        value = 7
-                    if cell['mapChangeData'] & 16 > 0:
-                        value = 9
-                    if cell['mapChangeData'] & 64 > 0 and cell['mapChangeData'] & 1 > 0:
-                        value = 4
-                    if cell['mapChangeData'] & 1 > 0 and cell['mapChangeData'] & 4 > 0:
-                        value = 6
-                    if cell['mapChangeData'] & 4 > 0 and cell['mapChangeData'] & 16 > 0:
-                        value = 8
-                    if cell['mapChangeData'] & 16 > 0 and cell['mapChangeData'] & 64 > 0:
-                        value = 10
+                n, s, w, e = False, False, False, False
+                if cell['mapChangeData'] and (cell['mapChangeData'] & 1 or (cell_id + 1) % 28 == 0 and cell['mapChangeData'] & 2 or (cell_id + 1) % 28 == 0 and cell['mapChangeData'] & 128):
+                    e = True
+                if cell['mapChangeData'] and (cell_id == 0 and cell['mapChangeData'] & 8 or cell['mapChangeData'] & 16 or cell_id == 0 and cell['mapChangeData'] & 32):
+                    w = True
+                if cell['mapChangeData'] and (cell_id < 14 and cell['mapChangeData'] & 32 or cell['mapChangeData'] & 64 or cell_id < 14 and cell['mapChangeData'] & 128):
+                    n = True
+                if cell['mapChangeData'] and (cell_id >= 546 and cell['mapChangeData'] & 2 or cell['mapChangeData'] & 4 or cell_id >= 546 and cell['mapChangeData'] & 8):
+                    s = True
+
+
+                if n and e:
+                    value = 4
+                elif n and w:
+                    value = 10
+                elif s and e:
+                    value = 6
+                elif s and w:
+                    value = 8
+                elif n:
+                    value = 3
+                elif s:
+                    value = 7
+                elif w:
+                    value = 9
+                elif e:
+                    value = 5
 
                 cells_pack.append(value)
-                i += 1
+                cell_id += 1
             except:
                 # Something strange with cells only having a 'floor' key...
                 pass
@@ -102,6 +117,17 @@ def generate_map_info():
     for map in maps:
         data = dlm_unpack.unpack_dlm(map)
         map_id, cells, elements = data['mapId'], data['cells'], data['layers'][0]['cells']
+        # if map_id == 133889:
+        #     i = 0
+        #     for cell_pack_id in range(len(cells) // 14):
+        #         cells_pack = []
+        #         for cell in cells[14 * cell_pack_id: 14 * (cell_pack_id + 1)]:
+        #             value = cell['mapChangeData']
+        #             cells_pack.append(value)
+        #             i += 1
+        #         print(cells_pack)
+        #     print(format_cells(cells))
+        #     raise Exception
         print('Generating data for map {} {};{}'.format(str(maps.index(map)) + '/' + str(len(maps)-1), map_positions_with_key[map_id]['posX'], map_positions_with_key[map_id]['posY']))
         map_data = {
             'id': map_id,
@@ -126,3 +152,6 @@ def generate_map_info():
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/elements_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(elements_info.items())[i * (len(elements_info.keys()) // n_splits): (i + 1) * (len(elements_info.keys()) // n_splits)]), f, ensure_ascii=False)
 
+
+if __name__ == '__main__':
+    generate_map_info()

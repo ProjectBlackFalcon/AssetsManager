@@ -11,16 +11,12 @@ from random import randint
 
 
 def get_edges(cells):
-    # corners = [(0, 0), (1, 0), (0, 1), (0, 2), (13, 0), (12, 1), (13, 1), (13, 2), (13, 37), (13, 38), (12, 39), (13, 39), (0, 37), (0, 38), (1, 38), (0, 39)]
-    corners = [(0, 0), (13, 39)]
-    for pos in corners:
-        cells[pos[1]][pos[0]] = 2
-
     north = [j for i in zip(cells[0], cells[1]) for j in i]
     south = [j for i in zip(cells[38], cells[39]) for j in i]
     west = [line[0] for line in cells]
     east = [line[-1] for line in cells]
     return {'n': north, 's': south, 'w': west, 'e': east}
+
 
 def edge_cell_to_map_cell(edge_cell, direction):
     if direction == 'n':
@@ -80,7 +76,7 @@ def path_exists_between_nodes(map, node1, node2):
             tentative_g_score = gscore[current] + (neighbor[0] - current[0]) ** 2 + (neighbor[1] - current[1]) ** 2
             if 0 <= neighbor[0] < map.shape[0]:
                 if 0 <= neighbor[1] < map.shape[1]:
-                    if map[neighbor[0]][neighbor[1]] in  [1, 2]:
+                    if map[neighbor[0]][neighbor[1]] in [-1, 1, 2]:
                         continue
                 else:
                     # array bound y walls
@@ -99,6 +95,7 @@ def path_exists_between_nodes(map, node1, node2):
                 heappush(oheap, (fscore[neighbor], neighbor))
 
     return False
+
 
 def get_map_nodes(map_data):
     edges = get_edges(map_data['cells'])
@@ -199,6 +196,7 @@ def trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes):
                 raise Exception('Unable to make map {} bijective with {} neighbour'.format(coords, direction))
                 pass
 
+
 def build_graph(map_info, worldmap, bbox):
     start = time.time()
     n_maps = 0
@@ -212,32 +210,46 @@ def build_graph(map_info, worldmap, bbox):
         for y in range(y_min, y_max + 1):
             count += 1
             # print(x, y)
-            map_data = fetch_map(map_info, '{};{}'.format(x ,y), worldmap)
+            map_data = fetch_map(map_info, '{};{}'.format(x, y), worldmap)
             if map_data is not None:
                 n_maps += 1
                 nodes = get_map_nodes(map_data)
-                coord_2_nodes['{};{}'.format(x ,y)] = list(nodes.keys())
+                coord_2_nodes['{};{}'.format(x, y)] = list(nodes.keys())
                 add_intra_neighbours(nodes, map_data['cells'])
                 graph.update(nodes)
 
     # Trimming graph
-    # for node_id, node in graph.items():
-    #     if len(node['neighbours']) == 0 and len(node['not_neighbours']):
-    #         delete_node(node_id, graph, coord_2_nodes)
 
+    # Manual part (some nodes just don't make sense...)
+    # nodes_removed_manually = {
+    #     '-20;22': [552],
+    #     '-16;31': [15],
+    #     '-9;26': [167],
+    #     '8;-19': [3, 6],
+    #     '12;-25': [0]
+    # }
+    # nodes_to_delete = []
+    # for key, node in graph.items():
+    #     if node['coord'] in nodes_removed_manually.keys():
+    #         if node['cell'] in nodes_removed_manually[node['coord']]:
+    #             nodes_to_delete.append(key)
+    # for node_id in nodes_to_delete:
+    #     delete_node(node_id, graph, coord_2_nodes)
+
+
+    # Automated part
     for x in range(x_min, x_max + 1):
         for y in range(y_min, y_max + 1):
             if '{};{}'.format(x, y) in coord_2_nodes.keys():
                 # North
-                if '{};{}'.format(x ,y - 1) in coord_2_nodes.keys():
+                if '{};{}'.format(x, y - 1) in coord_2_nodes.keys():
                     current_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y)]
-                    current_nodes = {node_id:graph[node_id] for node_id in current_map_nodes_ids if graph[node_id]['direction'] == 'n'}
+                    current_nodes = {node_id: graph[node_id] for node_id in current_map_nodes_ids if graph[node_id]['direction'] == 'n'}
 
-                    neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x ,y - 1)]
+                    neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y - 1)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 's'}
 
                     trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes)
-
 
                 # South
                 if '{};{}'.format(x, y + 1) in coord_2_nodes.keys():
@@ -276,9 +288,9 @@ def build_graph(map_info, worldmap, bbox):
                 # North
                 if '{};{}'.format(x ,y - 1) in coord_2_nodes.keys():
                     current_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y)]
-                    current_nodes = {node_id:graph[node_id] for node_id in current_map_nodes_ids if graph[node_id]['direction'] == 'n'}
+                    current_nodes = {node_id: graph[node_id] for node_id in current_map_nodes_ids if graph[node_id]['direction'] == 'n'}
 
-                    neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x ,y - 1)]
+                    neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y - 1)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 's'}
 
                     add_extra_neighbours(current_nodes, neighbour_nodes)
@@ -316,6 +328,7 @@ def build_graph(map_info, worldmap, bbox):
     print('Graph has {} nodes'.format(len(graph)))
     return graph
 
+
 def to_image(map, nodes, coords, scaling_factor):
     for y in range(len(map)):
         for x in range(len(map[0])):
@@ -345,5 +358,25 @@ def generate():
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/pathfinder_graph_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(graph.items())[i * (len(graph.keys()) // n_splits): (i + 1) * (len(graph.keys()) // n_splits)]), f, ensure_ascii=False)
 
-# map = cells_2_map(fetch_map(map_info, '-30;-55', 1)['cells'])
-# to_image(map, graph, '-30;-55', 1)
+    return graph
+
+
+if __name__ == '__main__':
+    map_info = []
+    for i in range(5):
+        with open('../definitive_output/map_info_{}.json'.format(i), 'r') as f:
+            map_info += json.load(f)
+    graph = {}
+    for i in range(2):
+        with open('../definitive_output/pathfinder_graph_{}.json'.format(i), 'r') as f:
+            graph.update(json.load(f))
+
+    # graph = generate()
+    pos = '-15;11'
+    for key, node in graph.items():
+        if node['coord'] == pos:
+            print(key, node)
+    map = cells_2_map(fetch_map(map_info, pos, 1)['cells'])
+    to_image(map, graph, pos, 1)
+
+
