@@ -228,13 +228,17 @@ def build_graph(map_info, worldmap, bbox):
     #     '8;-19': [3, 6],
     #     '12;-25': [0]
     # }
-    # nodes_to_delete = []
-    # for key, node in graph.items():
-    #     if node['coord'] in nodes_removed_manually.keys():
-    #         if node['cell'] in nodes_removed_manually[node['coord']]:
-    #             nodes_to_delete.append(key)
-    # for node_id in nodes_to_delete:
-    #     delete_node(node_id, graph, coord_2_nodes)
+    nodes_removed_manually = {
+        '-15;10': [195],
+        '13;27': [111]
+    }
+    nodes_to_delete = []
+    for key, node in graph.items():
+        if node['coord'] in nodes_removed_manually.keys():
+            if node['cell'] in nodes_removed_manually[node['coord']]:
+                nodes_to_delete.append(key)
+    for node_id in nodes_to_delete:
+        delete_node(node_id, graph, coord_2_nodes)
 
 
     # Automated part
@@ -371,8 +375,8 @@ if __name__ == '__main__':
         with open('../definitive_output/pathfinder_graph_{}.json'.format(i), 'r') as f:
             graph.update(json.load(f))
 
-    # graph = generate()
-    pos = '-15;11'
+    graph = generate()
+    pos = '13;27'
     for key, node in graph.items():
         if node['coord'] == pos:
             print(key, node)
