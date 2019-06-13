@@ -42,7 +42,7 @@ def generate():
                 print(e.args[0])
                 pass
 
-    print(name_set)
+    # print(name_set)
 
     output = {str(uid): 'Runes' for uid in runes}
     output.update({str(uid): 'Consommables' for uid in consumables})
@@ -60,7 +60,7 @@ def generate():
         'Animaux': pets,
         'Equipements': equipment,
     }
-    print(len(runes) + len(consumables) + len(resources) + len(pets) + len(equipment))
+    # print(len(runes) + len(consumables) + len(resources) + len(pets) + len(equipment))
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/hdv_2_id.json')), 'w', encoding='utf8') as f:
         json.dump(output, f, ensure_ascii=False)
 

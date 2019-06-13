@@ -32,7 +32,7 @@ def generate():
 
             effect = thing.replace('#1{~1~2 à }#2', '').replace('-#1{~1~2 à -}#2', '').strip()
             effect = '-' + effect if '-#1{~1~2 à -}#2' in thing else effect
-            print(stat, effect)
+            # print(stat, effect)
             output[stat] = effect
         except:
             pass

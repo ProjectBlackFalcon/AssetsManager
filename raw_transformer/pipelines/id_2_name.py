@@ -21,7 +21,7 @@ def generate():
         texts = json.load(f)['texts']
 
     id_2_names = {}
-    print(id_nameids)
+    # print(id_nameids)
     for id in id_nameids:
         try:
             id_2_names[str(id)] = texts[str(id_nameids[str(id)])]

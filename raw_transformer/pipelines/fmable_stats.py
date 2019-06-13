@@ -46,9 +46,8 @@ def generate():
                 pass
 
     fmable_stats = dict(set([(effect_id_2_name[str(effect[0])], effect[0]) for item_id, caracs in output.items() for effect in caracs['Stats']]))
-    print(fmable_stats)
     fmable_stats = {stat: (effect_id, runes_stats[stat]) for stat, effect_id in fmable_stats.items()}
-    print(fmable_stats)
+    # print(fmable_stats)
 
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/fmable_stats.json')), 'w', encoding="utf8") as f:
         json.dump(fmable_stats, f, ensure_ascii=False)

@@ -5,6 +5,7 @@ import uuid
 import numpy as np
 from math import ceil
 import matplotlib.pyplot as plt
+from multiprocessing import Pool, cpu_count
 
 import time
 from random import randint
@@ -175,7 +176,7 @@ def delete_node(node_id, graph, coord_2_nodes):
             node_id_list.remove(node_id)
 
 
-def trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes):
+def trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes):
     if len(current_nodes) > len(neighbour_nodes):
         coords = current_nodes[list(current_nodes.keys())[0]]['coord']
         direction = current_nodes[list(current_nodes.keys())[0]]['direction']
@@ -197,37 +198,31 @@ def trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes):
                 pass
 
 
+def create_map_nodes(map_data):
+    if map_data is not None:
+        nodes = get_map_nodes(map_data)
+        add_intra_neighbours(nodes, map_data['cells'])
+        return nodes
+    return {}
+
+
 def build_graph(map_info, worldmap, bbox):
     start = time.time()
-    n_maps = 0
     x_min, y_min, x_max, y_max = bbox
     coord_2_nodes, graph = {}, {}
 
     # Building initial graph without inter-map connections
-    potential_maps, count = (x_max + 1 - x_min) * (y_max + 1 - y_min), 0
-    for x in range(x_min, x_max + 1):
-        print('{}/{}'.format(count, potential_maps))
-        for y in range(y_min, y_max + 1):
-            count += 1
-            # print(x, y)
-            map_data = fetch_map(map_info, '{};{}'.format(x, y), worldmap)
-            if map_data is not None:
-                n_maps += 1
-                nodes = get_map_nodes(map_data)
-                coord_2_nodes['{};{}'.format(x, y)] = list(nodes.keys())
-                add_intra_neighbours(nodes, map_data['cells'])
-                graph.update(nodes)
+    coords = [(x, y) for x in range(x_min, x_max + 1) for y in range(y_min, y_max + 1)]
+
+    with Pool(cpu_count() - 1) as p:
+        nodes_list = p.map(create_map_nodes, [(fetch_map(map_info, '{};{}'.format(coord[0], coord[1]), worldmap)) for coord in coords])
+    graph = nodes_list[0]
+    for node in nodes_list[1:]:
+        graph.update(node)
 
     # Trimming graph
 
     # Manual part (some nodes just don't make sense...)
-    # nodes_removed_manually = {
-    #     '-20;22': [552],
-    #     '-16;31': [15],
-    #     '-9;26': [167],
-    #     '8;-19': [3, 6],
-    #     '12;-25': [0]
-    # }
     nodes_removed_manually = {
         '-15;10': [195],
         '13;27': [111]
@@ -253,7 +248,7 @@ def build_graph(map_info, worldmap, bbox):
                     neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y - 1)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 's'}
 
-                    trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes)
+                    trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes)
 
                 # South
                 if '{};{}'.format(x, y + 1) in coord_2_nodes.keys():
@@ -263,7 +258,7 @@ def build_graph(map_info, worldmap, bbox):
                     neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y + 1)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 'n'}
 
-                    trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes)
+                    trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes)
 
                 # West
                 if '{};{}'.format(x - 1, y) in coord_2_nodes.keys():
@@ -273,7 +268,7 @@ def build_graph(map_info, worldmap, bbox):
                     neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x - 1, y)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 'e'}
 
-                    trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes)
+                    trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes)
 
                 # East
                 if '{};{}'.format(x + 1, y) in coord_2_nodes.keys():
@@ -283,7 +278,7 @@ def build_graph(map_info, worldmap, bbox):
                     neighbour_map_nodes_ids = coord_2_nodes['{};{}'.format(x + 1, y)]
                     neighbour_nodes = {node_id: graph[node_id] for node_id in neighbour_map_nodes_ids if graph[node_id]['direction'] == 'w'}
 
-                    trim_graph(current_nodes, neighbour_nodes, graph, coord_2_nodes)
+                    trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes)
 
     # Building inter-map connections
     for x in range(x_min, x_max + 1):
@@ -328,7 +323,7 @@ def build_graph(map_info, worldmap, bbox):
                     add_extra_neighbours(current_nodes, neighbour_nodes)
 
     # print(json.dumps(graph))
-    print(n_maps, 'maps processed in', time.time() - start)
+    print(len(graph.keys()), 'maps factorized in', time.time() - start)
     print('Graph has {} nodes'.format(len(graph)))
     return graph
 
@@ -347,6 +342,7 @@ def to_image(map, nodes, coords, scaling_factor):
 
 
 def generate():
+    print('Generating pathfinder graph')
     assets = os.listdir(os.path.join(os.path.dirname(__file__), '../definitive_output'))
     map_info_files = [asset for asset in assets if asset.startswith('map_info')]
 
@@ -361,7 +357,7 @@ def generate():
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/pathfinder_graph_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(graph.items())[i * (len(graph.keys()) // n_splits): (i + 1) * (len(graph.keys()) // n_splits)]), f, ensure_ascii=False)
-
+    print('Pathfinder graph generated')
     return graph
 
 
