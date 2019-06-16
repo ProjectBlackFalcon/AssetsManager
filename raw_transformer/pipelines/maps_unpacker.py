@@ -69,12 +69,35 @@ def format_cells(cells):
     return output
 
 
+def format_cell_for_dofus_pf(cells):
+    output = []
+    for cell in cells:
+        output.append([
+            cell['mov'],
+            cell['nonWalkableDuringFight'],
+            cell['floor'],
+            cell['moveZone'],
+            cell['los'],
+            cell['speed'],
+        ])
+    return output
+
+
 def get_interactives(elements):
     formatted_elements = {}
     for cell in elements:
         for element in cell['elements']:
             formatted_elements[element['elementId']] = {'cell': cell['cellId']}
     return formatted_elements
+
+
+def is_using_new_movement_system(cells):
+    using = False
+    for cell in cells:
+        if cell['moveZone']:
+            using = True
+            break
+    return using
 
 
 def generate_single_map_data(map_path, map_positions_with_key):
@@ -86,7 +109,9 @@ def generate_single_map_data(map_path, map_positions_with_key):
         'subAreaid': map_positions_with_key[map_id]['subAreaId'],
         'worldMap': map_positions_with_key[map_id]['worldMap'],
         'hasPriorityOnWorldMap': map_positions_with_key[map_id]['hasPriorityOnWorldmap'],
-        'cells': format_cells(cells)
+        'rawCells': format_cell_for_dofus_pf(cells),
+        'cells': format_cells(cells),
+        'isUsingNewMovementSystem': is_using_new_movement_system(cells)
     }
     interactives = get_interactives(elements)
     return map_data, interactives
@@ -141,13 +166,13 @@ def generate_map_info():
         elements_info[map_data['id']] = interactives
 
     # Got to split it for it to fit in mongoDB
-    n_splits = ceil(len(json.dumps(map_info)) / 5000000)
+    n_splits = ceil(len(json.dumps(map_info)) / 10000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             print('Mapinfo_{} contains indices {} through {}'.format(i, i * (len(map_info) // n_splits), (i + 1) * (len(map_info) // n_splits)))
             json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
 
-    n_splits = ceil(len(json.dumps(elements_info)) / 5000000)
+    n_splits = ceil(len(json.dumps(elements_info)) / 10000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/elements_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(elements_info.items())[i * (len(elements_info.keys()) // n_splits): (i + 1) * (len(elements_info.keys()) // n_splits)]), f, ensure_ascii=False)
