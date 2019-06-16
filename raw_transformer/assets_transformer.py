@@ -23,6 +23,7 @@ from pipelines import maps_unpacker
 from pipelines import itemid_to_itemiconid
 from pipelines import fmable_stats
 from pipelines import pathfinder_graph
+from pipelines import server_2_id
 
 
 if __name__ == '__main__':
@@ -70,6 +71,7 @@ if __name__ == '__main__':
     rune_2_id.generate()
     equipments.generate()
     fmable_stats.generate()
+    server_2_id.generate()
     print('Done in', time.time() - start)
     print('Total time: {} minutes, {}s'.format(round(time.time() - init_start) // 60, round(time.time() - init_start) % 60))
 
