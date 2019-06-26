@@ -24,6 +24,7 @@ from pipelines import itemid_to_itemiconid
 from pipelines import fmable_stats
 from pipelines import pathfinder_graph
 from pipelines import server_2_id
+from pipelines import hashes_and_sizes
 
 
 if __name__ == '__main__':
@@ -60,6 +61,7 @@ if __name__ == '__main__':
 
     print('Applying transformations')
     start = time.time()
+    hashes_and_sizes.generate(root)
     maps_unpacker.generate_map_info()
     pathfinder_graph.generate()
     itemid_to_itemiconid.generate()

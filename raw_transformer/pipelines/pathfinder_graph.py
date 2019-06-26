@@ -352,6 +352,8 @@ def generate():
             map_info += json.load(f)
 
     graph = build_graph(map_info, 1, (-40, -67, 27, 51))
+    graph.update(build_graph(map_info, 2, (-3, -6, 5, 1)))
+    graph.update(build_graph(map_info, -1, (-40, -67, 27, 51)))
 
     n_splits = ceil(len(json.dumps(graph)) / 5000000)
     for i in range(n_splits):
