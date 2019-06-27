@@ -139,9 +139,8 @@ def generate_map_info():
     maps = []
     for root, dir, files in os.walk(os.path.abspath(os.path.join(os.path.dirname(__file__), '../partially_unpacked_maps'))):
         for file in files:
-            if file.endswith('.dlm'):
+            if file.endswith('.dlm') and 'maps' in root:
                 maps.append(root + '/' + file)
-
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/MapPositions.json')), 'r') as f:
         map_positions = json.load(f)
     map_positions_with_key = {}

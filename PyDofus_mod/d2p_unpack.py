@@ -35,18 +35,21 @@ def unpack(files_paths='./input/', output=os.path.abspath(os.path.join(os.path.d
                     os.makedirs(path_output + "/" + file_name[:-4] + "/" + os.path.dirname(name))
 
                 if "swl" in name:
-                    swl = io.BytesIO(specs["binary"])
-                    swl_reader = SWLReader(swl)
+                    pass
+                    # This is broken
 
-                    swf_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "swf"), "wb")
-                    json_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "json"), "w")
-
-                    swf_output.write(swl_reader.SWF)
-                    swl_data = {'version':swl_reader.version, 'frame_rate':swl_reader.frame_rate, 'classes':swl_reader.classes}
-                    json.dump(swl_data, json_output, indent=4)
-
-                    swf_output.close()
-                    json_output.close()
+                    # swl = io.BytesIO(specs["binary"])
+                    # swl_reader = SWLReader(swl)
+                    #
+                    # swf_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "swf"), "wb")
+                    # json_output = open(path_output + "/" + file_name[:-4] + "/" + name.replace("swl", "json"), "w")
+                    #
+                    # swf_output.write(swl_reader.SWF)
+                    # swl_data = {'version':swl_reader.version, 'frame_rate':swl_reader.frame_rate, 'classes':swl_reader.classes}
+                    # json.dump(swl_data, json_output, indent=4)
+                    #
+                    # swf_output.close()
+                    # json_output.close()
                 else:
                     file_output = open(path_output + "/" + file_name[:-4] + "/" + name, "wb")
                     file_output.write(specs["binary"])
