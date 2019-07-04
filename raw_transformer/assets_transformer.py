@@ -37,19 +37,23 @@ if __name__ == '__main__':
     for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output'))):
         if file.endswith('.json'):
             os.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output/') + file))
+    for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'output'))):
+        if file != '_':
+            os.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'output/') + file))
 
     files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
     files = os.walk(root)
     for root, dirs, files in files:
         for file in files:
-            if file.endswith('d2i'):
-                files_paths['d2i'].append(root + '/' + file)
-            if file.endswith('d2o'):
-                files_paths['d2o'].append(root + '/' + file)
-            if file.endswith('d2p'):
-                files_paths['d2p'].append(root + '/' + file)
-            if file.endswith('ele'):
-                files_paths['ele'].append(root + '/' + file)
+            if 'gfx' not in file and 'audio' not in file:
+                if file.endswith('d2i'):
+                    files_paths['d2i'].append(root + '/' + file)
+                if file.endswith('d2o'):
+                    files_paths['d2o'].append(root + '/' + file)
+                if file.endswith('d2p'):
+                    files_paths['d2p'].append(root + '/' + file)
+                if file.endswith('ele'):
+                    files_paths['ele'].append(root + '/' + file)
 
     print('Unpacking source files')
     init_start = time.time()
@@ -78,3 +82,4 @@ if __name__ == '__main__':
     print('Total time: {} minutes, {}s'.format(round(time.time() - init_start) // 60, round(time.time() - init_start) % 60))
 
     'python raw_transformer\assets_transformer.py raw_transformer\input'
+    'python raw_transformer\assets_transformer.py D:\Jeux\Misc\Dofus2'
