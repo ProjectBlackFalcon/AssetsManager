@@ -150,14 +150,6 @@ def generate_map_info():
     map_info = []
     elements_info = {}
 
-    # Not parallel (544 seconds)
-    # for map in maps:
-    #     map_data, interactives = generate_single_map_data(map, map_positions_with_key)
-    #     print('Generating data for map {} {};{}'.format(str(maps.index(map)) + '/' + str(len(maps)-1), map_positions_with_key[map_data['id']]['posX'], map_positions_with_key[map_data['id']]['posY']))
-    #     map_info.append(map_data)
-    #     elements_info[map_data['id']] = interactives
-
-    # Parallel (175 seconds, bout 3 times faster)
     with Pool(cpu_count() - 1) as p:
         results_list = p.starmap(generate_single_map_data, [(map, map_positions_with_key) for map in maps])
     for map_data, interactives in results_list:
@@ -165,13 +157,14 @@ def generate_map_info():
         elements_info[map_data['id']] = interactives
 
     # Got to split it for it to fit in mongoDB
-    n_splits = ceil(len(json.dumps(map_info)) / 10000000)
+    size = len(json.dumps(map_info[0])) * len(map_info)
+    n_splits = ceil(size / 10000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             print('Mapinfo_{} contains indices {} through {}'.format(i, i * (len(map_info) // n_splits), (i + 1) * (len(map_info) // n_splits)))
             json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
 
-    n_splits = ceil(len(json.dumps(elements_info)) / 10000000)
+    n_splits = ceil(len(str(elements_info)) / 10000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/elements_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(elements_info.items())[i * (len(elements_info.keys()) // n_splits): (i + 1) * (len(elements_info.keys()) // n_splits)]), f, ensure_ascii=False)
