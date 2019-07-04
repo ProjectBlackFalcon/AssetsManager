@@ -1,5 +1,6 @@
 import sys
 import os
+import shutil
 import time
 from multiprocessing import Pool, cpu_count
 
@@ -34,18 +35,23 @@ if __name__ == '__main__':
 
     # root = 'input'
 
+    print('Deleting old files')
     for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output'))):
         if file.endswith('.json'):
             os.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output/') + file))
+
     for file in os.listdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'output'))):
         if file != '_':
             os.remove(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'output/') + file))
+
+    shutil.rmtree(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps')))
+    os.mkdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps')))
 
     files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
     files = os.walk(root)
     for root, dirs, files in files:
         for file in files:
-            if 'gfx' not in file and 'audio' not in file:
+            if 'gfx' not in file and 'audio' not in file and 'bone' not in file:
                 if file.endswith('d2i'):
                     files_paths['d2i'].append(root + '/' + file)
                 if file.endswith('d2o'):
