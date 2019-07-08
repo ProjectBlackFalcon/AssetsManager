@@ -103,6 +103,12 @@ def is_using_new_movement_system(cells):
 def generate_single_map_data(map_path, map_positions_with_key):
     data = dlm_unpack.unpack_dlm(map_path)
     map_id, cells, elements = str(int(data['mapId'])), data['cells'], data['layers'][0]['cells']
+    neighbours = {
+        'n': data['topNeighbourId'],
+        's': data['bottomNeighbourId'],
+        'w': data['leftNeighbourId'],
+        'e': data['rightNeighbourId'],
+    }
     map_data = {
         'id': int(map_id),
         'coord': '{};{}'.format(map_positions_with_key[map_id]['posX'], map_positions_with_key[map_id]['posY']),
@@ -111,7 +117,8 @@ def generate_single_map_data(map_path, map_positions_with_key):
         'hasPriorityOnWorldMap': map_positions_with_key[map_id]['hasPriorityOnWorldmap'],
         'rawCells': format_cell_for_dofus_pf(cells),
         'cells': format_cells(cells),
-        'isUsingNewMovementSystem': is_using_new_movement_system(cells)
+        'isUsingNewMovementSystem': is_using_new_movement_system(cells),
+        'neighbours': neighbours
     }
     interactives = get_interactives(elements)
     return map_data, interactives
