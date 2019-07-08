@@ -102,9 +102,9 @@ def is_using_new_movement_system(cells):
 
 def generate_single_map_data(map_path, map_positions_with_key):
     data = dlm_unpack.unpack_dlm(map_path)
-    map_id, cells, elements = data['mapId'], data['cells'], data['layers'][0]['cells']
+    map_id, cells, elements = str(int(data['mapId'])), data['cells'], data['layers'][0]['cells']
     map_data = {
-        'id': map_id,
+        'id': int(map_id),
         'coord': '{};{}'.format(map_positions_with_key[map_id]['posX'], map_positions_with_key[map_id]['posY']),
         'subAreaid': map_positions_with_key[map_id]['subAreaId'],
         'worldMap': map_positions_with_key[map_id]['worldMap'],
@@ -137,19 +137,20 @@ def generate_map_info():
     print('Generating map info')
     start = time.time()
     maps = []
-    for root, dir, files in os.walk(os.path.abspath(os.path.join(os.path.dirname(__file__), '../partially_unpacked_maps'))):
-        for file in files:
-            if file.endswith('.dlm') and 'maps' in root:
-                maps.append(root + '/' + file)
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../output/MapPositions.json')), 'r') as f:
         map_positions = json.load(f)
     map_positions_with_key = {}
     for map in map_positions:
-        map_positions_with_key[map['id']] = map
+        if -39 <= map['posX'] <= 24 and -65 <= map['posY'] <= 48:
+            map_positions_with_key[str(int(map['id']))] = map
+
+    for root, dir, files in os.walk(os.path.abspath(os.path.join(os.path.dirname(__file__), '../partially_unpacked_maps'))):
+        for file in files:
+            if file.endswith('.dlm') and 'maps' in root and os.path.basename(file).replace('.dlm', '') in map_positions_with_key.keys():
+                maps.append(root + '/' + file)
 
     map_info = []
     elements_info = {}
-
     with Pool(cpu_count() - 1) as p:
         results_list = p.starmap(generate_single_map_data, [(map, map_positions_with_key) for map in maps])
     for map_data, interactives in results_list:
