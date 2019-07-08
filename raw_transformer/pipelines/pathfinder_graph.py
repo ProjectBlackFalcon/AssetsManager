@@ -344,7 +344,7 @@ def to_image(map, nodes, coords, scaling_factor):
 def generate():
     print('Generating pathfinder graph')
     assets = os.listdir(os.path.join(os.path.dirname(__file__), '../definitive_output'))
-    map_info_files = [asset for asset in assets if asset.startswith('map_info')]
+    map_info_files = [asset for asset in assets if asset.startswith('map_info') and 'index' not in asset]
 
     map_info = []
     for file in map_info_files:

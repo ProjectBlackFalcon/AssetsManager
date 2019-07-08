@@ -1,3 +1,4 @@
+import ast
 import os
 import json
 import time
@@ -164,15 +165,46 @@ def generate_map_info():
         map_info.append(map_data)
         elements_info[map_data['id']] = interactives
 
+
+    # Inserting serialization step there
+    counts = {}
+    for map in map_info:
+        for cell in map['rawCells']:
+            if str(cell) in counts.keys():
+                counts[str(cell)] += 1
+            else:
+                counts[str(cell)] = 1
+
+    result = []
+    for key, value in counts.items():
+        result.append((key, value))
+
+    result = sorted(result, key=lambda k: [k[1], k[0]], reverse=True)
+    reverse_map_info_index = {}
+    map_info_index = []
+    for indx, (entry, _) in enumerate(result):
+        reverse_map_info_index[entry] = indx
+        map_info_index.append(entry)
+
+    for map in map_info:
+        new_raw_cell = []
+        for cell in map['rawCells']:
+            new_raw_cell.append(reverse_map_info_index[str(cell)])
+        map['rawCells'] = new_raw_cell
+
+    # Saving all that data
+    with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_index.json')),'w', encoding='utf8') as f:
+        json.dump(map_info_index, f)
+
     # Got to split it for it to fit in mongoDB
     size = len(json.dumps(map_info[0])) * len(map_info)
-    n_splits = ceil(size / 10000000)
+    n_splits = ceil(size / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/map_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             print('Mapinfo_{} contains indices {} through {}'.format(i, i * (len(map_info) // n_splits), (i + 1) * (len(map_info) // n_splits)))
             json.dump(map_info[i * (len(map_info) // n_splits): (i + 1) * (len(map_info) // n_splits)], f, ensure_ascii=False)
 
-    n_splits = ceil(len(str(elements_info)) / 10000000)
+    n_splits = ceil(len(str(elements_info)) / 5000000)
     for i in range(n_splits):
         with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/elements_info_{}.json'.format(i))), 'w', encoding='utf8') as f:
             json.dump(dict(list(elements_info.items())[i * (len(elements_info.keys()) // n_splits): (i + 1) * (len(elements_info.keys()) // n_splits)]), f, ensure_ascii=False)
