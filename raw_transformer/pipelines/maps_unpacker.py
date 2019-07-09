@@ -84,11 +84,13 @@ def format_cell_for_dofus_pf(cells):
     return output
 
 
-def get_interactives(elements):
+def get_interactives(layers):
     formatted_elements = {}
-    for cell in elements:
-        for element in cell['elements']:
-            formatted_elements[element['elementId']] = {'cell': cell['cellId']}
+    for layer in layers:
+        for cell in layer['cells']:
+            for element in cell['elements']:
+                if 'identifier' in element.keys() and element['identifier'] != 0:
+                    formatted_elements[element['identifier']] = {'cell': cell['cellId']}
     return formatted_elements
 
 
@@ -103,7 +105,7 @@ def is_using_new_movement_system(cells):
 
 def generate_single_map_data(map_path, map_positions_with_key):
     data = dlm_unpack.unpack_dlm(map_path)
-    map_id, cells, elements = str(int(data['mapId'])), data['cells'], data['layers'][0]['cells']
+    map_id, cells, layers = str(int(data['mapId'])), data['cells'], data['layers']
     neighbours = {
         'n': data['topNeighbourId'],
         's': data['bottomNeighbourId'],
@@ -121,7 +123,7 @@ def generate_single_map_data(map_path, map_positions_with_key):
         'isUsingNewMovementSystem': is_using_new_movement_system(cells),
         'neighbours': neighbours
     }
-    interactives = get_interactives(elements)
+    interactives = get_interactives(layers)
     return map_data, interactives
 
 
