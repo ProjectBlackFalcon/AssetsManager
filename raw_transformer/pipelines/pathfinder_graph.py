@@ -208,25 +208,35 @@ def create_map_nodes(map_data):
 
 def build_graph(map_info, worldmap, bbox):
     start = time.time()
+    n_maps = 0
     x_min, y_min, x_max, y_max = bbox
     coord_2_nodes, graph = {}, {}
 
     # Building initial graph without inter-map connections
-    coords = [(x, y) for x in range(x_min, x_max + 1) for y in range(y_min, y_max + 1)]
-
-    with Pool(cpu_count() - 1) as p:
-        nodes_list = p.map(create_map_nodes, [(fetch_map(map_info, '{};{}'.format(coord[0], coord[1]), worldmap)) for coord in coords])
-    graph = nodes_list[0]
-    for node in nodes_list[1:]:
-        graph.update(node)
+    potential_maps, count = (x_max + 1 - x_min) * (y_max + 1 - y_min), 0
+    for x in range(x_min, x_max + 1):
+        print('{}/{}'.format(count, potential_maps))
+        for y in range(y_min, y_max + 1):
+            count += 1
+            # print(x, y)
+            map_data = fetch_map(map_info, '{};{}'.format(x, y), worldmap)
+            if map_data is not None:
+                n_maps += 1
+                nodes = get_map_nodes(map_data)
+                coord_2_nodes['{};{}'.format(x, y)] = list(nodes.keys())
+                add_intra_neighbours(nodes, map_data['cells'])
+                graph.update(nodes)
 
     # Trimming graph
 
     # Manual part (some nodes just don't make sense...)
-    nodes_removed_manually = {
-        '-15;10': [195],
-        '13;27': [111]
-    }
+    print(worldmap)
+    nodes_removed_manually = {}
+    if worldmap == 1:
+        nodes_removed_manually = {
+            '-15;10': [195],
+            '13;27': [111]
+        }
     nodes_to_delete = []
     for key, node in graph.items():
         if node['coord'] in nodes_removed_manually.keys():
@@ -353,7 +363,7 @@ def generate():
 
     graph = build_graph(map_info, 1, (-40, -67, 27, 51))
     graph.update(build_graph(map_info, 2, (-3, -6, 5, 1)))
-    graph.update(build_graph(map_info, -1, (-40, -67, 27, 51)))
+    # graph.update(build_graph(map_info, -1, (-40, -67, 27, 51)))
 
     n_splits = ceil(len(json.dumps(graph)) / 5000000)
     for i in range(n_splits):
@@ -365,7 +375,7 @@ def generate():
 
 if __name__ == '__main__':
     map_info = []
-    for i in range(5):
+    for i in range(7):
         with open('../definitive_output/map_info_{}.json'.format(i), 'r') as f:
             map_info += json.load(f)
     graph = {}
@@ -374,7 +384,7 @@ if __name__ == '__main__':
             graph.update(json.load(f))
 
     graph = generate()
-    pos = '13;27'
+    pos = '-30;-48'
     for key, node in graph.items():
         if node['coord'] == pos:
             print(key, node)
