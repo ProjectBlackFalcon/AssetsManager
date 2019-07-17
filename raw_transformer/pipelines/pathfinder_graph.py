@@ -116,6 +116,7 @@ def get_map_nodes(map_data):
                     'map_id': map_data['id'],
                     'edge_id': edge_id,
                     'coord': map_data['coord'],
+                    'worldmap': map_data['worldMap'],
                     'center': int((i - node_start - 1) // 2 + node_start),
                     'cell': edge_cell_to_map_cell(int((i - node_start - 1) / 2 + node_start), direction),
                     'direction': direction,
@@ -230,7 +231,6 @@ def build_graph(map_info, worldmap, bbox):
     # Trimming graph
 
     # Manual part (some nodes just don't make sense...)
-    print(worldmap)
     nodes_removed_manually = {}
     if worldmap == 1:
         nodes_removed_manually = {
@@ -295,7 +295,7 @@ def build_graph(map_info, worldmap, bbox):
         for y in range(y_min, y_max + 1):
             if '{};{}'.format(x, y) in coord_2_nodes.keys():
                 # North
-                if '{};{}'.format(x ,y - 1) in coord_2_nodes.keys():
+                if '{};{}'.format(x, y - 1) in coord_2_nodes.keys():
                     current_map_nodes_ids = coord_2_nodes['{};{}'.format(x, y)]
                     current_nodes = {node_id: graph[node_id] for node_id in current_map_nodes_ids if graph[node_id]['direction'] == 'n'}
 
@@ -338,13 +338,13 @@ def build_graph(map_info, worldmap, bbox):
     return graph
 
 
-def to_image(map, nodes, coords, scaling_factor):
+def to_image(map, nodes, coords, worldmap, scaling_factor):
     for y in range(len(map)):
         for x in range(len(map[0])):
             if map[y, x] > 2:
                 map[y, x] = 3
     for node in nodes.values():
-        if node['coord'] == coords:
+        if node['coord'] == coords and node['worldmap'] == worldmap:
             map[cell_2_coord(node['cell'])] = 4
     big_map = np.kron(map, np.ones((scaling_factor, scaling_factor))).astype(int)
     plt.imshow(big_map)
@@ -361,8 +361,8 @@ def generate():
         with open(os.path.join(os.path.dirname(__file__), '../definitive_output', file), 'r', encoding='utf8') as f:
             map_info += json.load(f)
 
-    graph = build_graph(map_info, 1, (-40, -67, 27, 51))
-    graph.update(build_graph(map_info, 2, (-3, -6, 5, 1)))
+    graph = build_graph(map_info, 2, (-3, -6, 5, 1))
+    graph.update(build_graph(map_info, 1, (-40, -67, 27, 51)))
     # graph.update(build_graph(map_info, -1, (-40, -67, 27, 51)))
 
     n_splits = ceil(len(json.dumps(graph)) / 5000000)
@@ -384,11 +384,37 @@ if __name__ == '__main__':
             graph.update(json.load(f))
 
     graph = generate()
-    pos = '-30;-48'
-    for key, node in graph.items():
-        if node['coord'] == pos:
-            print(key, node)
-    map = cells_2_map(fetch_map(map_info, pos, 1)['cells'])
-    to_image(map, graph, pos, 1)
+    pos = '2;-1'
+    worldmap = 2
+    # for key, node in graph.items():
+    #     if node['coord'] == pos:
+    #         print(key, node)
+    map = fetch_map(map_info, pos, worldmap)['cells']
+    to_image(cells_2_map(map), graph, pos, worldmap, 1)
+
+
+    # edges = get_edges(map)
+    #
+    # for direction, edge in edges.items():
+    #     ok_cells = [[3, 4, 10], [6, 7, 8], [4, 5, 6], [8, 9, 10]][['n', 's', 'e', 'w'].index(direction)]
+    #     print(direction, edge)
+    #     node_start = None
+    #     edge_id = 0
+    #     for i in range(len(edge)):
+    #         if node_start is None and edge[i] in ok_cells:
+    #             node_start = i
+    #         if node_start is not None and (edge[i] not in ok_cells or i == len(edge) - 1):
+    #             node = {
+    #                 'edge_id': edge_id,
+    #                 'center': int((i - node_start - 1) // 2 + node_start),
+    #                 'cell': edge_cell_to_map_cell(int((i - node_start - 1) / 2 + node_start), direction),
+    #                 'direction': direction,
+    #                 'neighbours': [],
+    #                 'not_neighbours': []
+    #             }
+    #             print('New node: ', str(node))
+    #             edge_id += 1
+    #             node_start = None
+
 
 
