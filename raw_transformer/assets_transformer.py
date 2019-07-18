@@ -3,6 +3,7 @@ import os
 import shutil
 import time
 from multiprocessing import Pool, cpu_count
+from shutil import copyfile
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'PyDofus_mod')))
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'raw_transformer')))
@@ -84,6 +85,7 @@ if __name__ == '__main__':
     equipments.generate()
     fmable_stats.generate()
     server_2_id.generate()
+    shutil.copyfile(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'output', 'Skills.json')), os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'definitive_output', 'Skills.json')))
     print('Done in', time.time() - start)
     print('Total time: {} minutes, {}s'.format(round(time.time() - init_start) // 60, round(time.time() - init_start) % 60))
 
