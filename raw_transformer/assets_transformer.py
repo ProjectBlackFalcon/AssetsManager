@@ -50,17 +50,17 @@ if __name__ == '__main__':
 
     files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
     files = os.walk(root)
-    for root, dirs, files in files:
+    for rt, dirs, files in files:
         for file in files:
             if 'gfx' not in file and 'audio' not in file and 'bone' not in file:
                 if file.endswith('d2i'):
-                    files_paths['d2i'].append(root + '/' + file)
+                    files_paths['d2i'].append(rt + '/' + file)
                 if file.endswith('d2o'):
-                    files_paths['d2o'].append(root + '/' + file)
+                    files_paths['d2o'].append(rt + '/' + file)
                 if file.endswith('d2p'):
-                    files_paths['d2p'].append(root + '/' + file)
+                    files_paths['d2p'].append(rt + '/' + file)
                 if file.endswith('ele'):
-                    files_paths['ele'].append(root + '/' + file)
+                    files_paths['ele'].append(rt + '/' + file)
 
     print('Unpacking source files')
     init_start = time.time()
