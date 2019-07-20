@@ -18,6 +18,7 @@ from pipelines import named_recipes
 from pipelines import id_2_hdv
 from pipelines import id_2_name
 from pipelines import id_2_type
+from pipelines import id_2_weight
 from pipelines import effect_id_2_name
 from pipelines import rune_2_id
 from pipelines import equipments
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     id_2_hdv.generate()
     id_2_name.generate()
     id_2_type.generate()
+    id_2_weight.generate()
     effect_id_2_name.generate()
     rune_2_id.generate()
     equipments.generate()
