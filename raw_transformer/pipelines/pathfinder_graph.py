@@ -103,14 +103,20 @@ def get_map_nodes(map_data):
     # for edge in edges.items():
     #     print(edge)
     nodes = {}
+    edge_id = 0
     for direction, edge in edges.items():
         ok_cells = [[3, 4, 10], [6, 7, 8], [4, 5, 6], [8, 9, 10]][['n', 's', 'e', 'w'].index(direction)]
         # print(direction, edge)
         node_start = None
-        edge_id = 0
+        edge_cells = set([])
         for i in range(len(edge)):
             if node_start is None and edge[i] in ok_cells:
                 node_start = i
+                edge_cells.add(edge_cell_to_map_cell(i, direction))
+
+            if node_start is not None and edge[i] in ok_cells:
+                edge_cells.add(edge_cell_to_map_cell(i, direction))
+
             if node_start is not None and (edge[i] not in ok_cells or i == len(edge) - 1):
                 nodes[str(uuid.uuid4())] = {
                     'map_id': map_data['id'],
@@ -121,7 +127,8 @@ def get_map_nodes(map_data):
                     'cell': edge_cell_to_map_cell(int((i - node_start - 1) / 2 + node_start), direction),
                     'direction': direction,
                     'neighbours': [],
-                    'not_neighbours': []
+                    'not_neighbours': [],
+                    'edge': list(edge_cells)
                 }
                 edge_id += 1
                 node_start = None
@@ -235,7 +242,8 @@ def build_graph(map_info, worldmap, bbox):
     if worldmap == 1:
         nodes_removed_manually = {
             '-15;10': [195],
-            '13;27': [111]
+            '13;27': [111],
+            '-28;-26': [554],
         }
     nodes_to_delete = []
     for key, node in graph.items():
@@ -384,11 +392,11 @@ if __name__ == '__main__':
             graph.update(json.load(f))
 
     graph = generate()
-    pos = '2;-1'
-    worldmap = 2
-    # for key, node in graph.items():
-    #     if node['coord'] == pos:
-    #         print(key, node)
+    pos = '-28;-26'
+    worldmap = 1
+    for key, node in graph.items():
+        if node['coord'] == pos:
+            print(key, node)
     map = fetch_map(map_info, pos, worldmap)['cells']
     to_image(cells_2_map(map), graph, pos, worldmap, 1)
 
