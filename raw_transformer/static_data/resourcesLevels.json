@@ -1,0 +1,314 @@
+{
+  "Or": [
+    160,
+    "24"
+  ],
+  "Lotte": [
+    140,
+    "36"
+  ],
+  "Bois d'Ebene": [
+    140,
+    "2"
+  ],
+  "Sadrdine Brillante": [
+    70,
+    "36"
+  ],
+  "Bois d'Orme": [
+    180,
+    "2"
+  ],
+  "Chanvre": [
+    140,
+    "26"
+  ],
+  "Bois de Charme": [
+    160,
+    "2"
+  ],
+  "Bois de Bombu": [
+    70,
+    "2"
+  ],
+  "Kobalte": [
+    60,
+    "24"
+  ],
+  "Anguille": [
+    100,
+    "36"
+  ],
+  "Bois de Merisier": [
+    120,
+    "2"
+  ],
+  "Brochet": [
+    80,
+    "36"
+  ],
+  "Graine de Pandouille": [
+    120,
+    "26"
+  ],
+  "Riz": [
+    100,
+    "28"
+  ],
+  "Mandragore": [
+    180,
+    "26"
+  ],
+  "Ortie": [
+    1,
+    "26"
+  ],
+  "Bois d'Acajou": [
+    200,
+    "2"
+  ],
+  "Perce-Neige": [
+    200,
+    "26"
+  ],
+  "Bois de Kaliptus": [
+    150,
+    "2"
+  ],
+  "Dorade Grise": [
+    110,
+    "36"
+  ],
+  "Bois de Bambou Sombre": [
+    170,
+    "2"
+  ],
+  "Perche": [
+    120,
+    "36"
+  ],
+  "Morue": [
+    170,
+    "36"
+  ],
+  "Bauxite": [
+    140,
+    "24"
+  ],
+  "Orge": [
+    20,
+    "28"
+  ],
+  "Raie Bleue": [
+    130,
+    "36"
+  ],
+  "Fer": [
+    1,
+    "24"
+  ],
+  "Ginseng": [
+    140,
+    "26"
+  ],
+  "Greuvette": [
+    10,
+    "36"
+  ],
+  "Bois de Tremble": [
+    200,
+    "2"
+  ],
+  "Ble": [
+    1,
+    "28"
+  ],
+  "Kralamoure": [
+    90,
+    "36"
+  ],
+  "Bronze": [
+    40,
+    "24"
+  ],
+  "Orchidee frayesque": [
+    80,
+    "26"
+  ],
+  "Manganese": [
+    80,
+    "24"
+  ],
+  "Etain": [
+    100,
+    "24"
+  ],
+  "Bois de Bambou": [
+    110,
+    "2"
+  ],
+  "Frostiz": [
+    200,
+    "28"
+  ],
+  "Obsidienne": [
+    200,
+    "24"
+  ],
+  "Espadon": [
+    190,
+    "36"
+  ],
+  "Bois d'If": [
+    100,
+    "2"
+  ],
+  "Houblon": [
+    60,
+    "28"
+  ],
+  "Sauge": [
+    20,
+    "28"
+  ],
+  "Bois de Noyer": [
+    40,
+    "2"
+  ],
+  "Poiskaille": [
+    200,
+    "36"
+  ],
+  "Dolomite": [
+    180,
+    "24"
+  ],
+  "Quisnoa": [
+    200,
+    "28"
+  ],
+  "Lin": [
+    80,
+    "28"
+  ],
+  "Trefle a 5 feuilles": [
+    40,
+    "26"
+  ],
+  "Patelle": [
+    200,
+    "36"
+  ],
+  "Bois de Chatainier": [
+    20,
+    "2"
+  ],
+  "Poisson-Chaton": [
+    40,
+    "36"
+  ],
+  "Avoine": [
+    40,
+    "28"
+  ],
+  "Silicate": [
+    100,
+    "24"
+  ],
+  "Mais": [
+    160,
+    "28"
+  ],
+  "Bois d'Oliviolet": [
+    90,
+    "2"
+  ],
+  "Carpe d'Iem": [
+    60,
+    "36"
+  ],
+  "Salikrone": [
+    200,
+    "26"
+  ],
+  "Seigle": [
+    100,
+    "28"
+  ],
+  "Goujon": [
+    1,
+    "36"
+  ],
+  "Cuivre": [
+    20,
+    "24"
+  ],
+  "Bois de Chene": [
+    60,
+    "2"
+  ],
+  "Bois de Frene": [
+    1,
+    "2"
+  ],
+  "Bois de Noisetier": [
+    130,
+    "2"
+  ],
+  "Menthe sauvage": [
+    60,
+    "26"
+  ],
+  "Edelweiss": [
+    100,
+    "26"
+  ],
+  "Ecume de mer": [
+    200,
+    "24"
+  ],
+  "Millet": [
+    180,
+    "28"
+  ],
+  "Bois de Bambou Sacre": [
+    190,
+    "2"
+  ],
+  "Truite": [
+    20,
+    "36"
+  ],
+  "Requin Marteau-Faucille": [
+    150,
+    "36"
+  ],
+  "Bar Rikain": [
+    160,
+    "36"
+  ],
+  "Tanche": [
+    180,
+    "36"
+  ],
+  "Belladone": [
+    160,
+    "26"
+  ],
+  "Bois d'Erable": [
+    80,
+    "2"
+  ],
+  "Argent": [
+    120,
+    "24"
+  ],
+  "Malt": [
+    120,
+    "28"
+  ],
+  "Eau": [
+    1,
+    "1"
+  ]
+}

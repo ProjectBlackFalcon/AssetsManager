@@ -1,0 +1,102 @@
+{
+  "0": [{"Name": "lel", "Id": 0, "Slot": 0}],
+  "20": [
+    {"Name": "sandales du piou vert", "Id": 8228, "Slot": 5},
+    {"Name": "anneau champetre", "Id": 6791, "Slot": 2},
+    {"Name": "cape du piou vert", "Id": 8233, "Slot": 7},
+    {"Name": "anneau du piou vert", "Id": 8222, "Slot": 4},
+    {"Name": "chapeau du piou vert", "Id": 8246, "Slot": 6},
+    {"Name": "ceinture du piou vert", "Id": 8240, "Slot": 3},
+    {"Name": "amulette du piou vert", "Id": 8216, "Slot": 0}
+  ],
+  "40": [
+    {"Name": "bottes du garde royal", "Id": 17507, "Slot": 5},
+    {"Name": "anneau champetre", "Id": 6791, "Slot": 2},
+    {"Name": "cape zombique", "Id": 19146, "Slot": 7},
+    {"Name": "anneau des rocheuses", "Id": 278, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "coiffe zombique", "Id": 19147, "Slot": 6},
+    {"Name": "ceinture dragocourse", "Id": 17734, "Slot": 3},
+    {"Name": "larvamulette", "Id": 7106, "Slot": 0},
+    {"Name": "epee du garde royal", "Id": 17494, "Slot": 1}
+  ],
+  "60": [
+    {"Name": "bottes du garde royal", "Id": 17507, "Slot": 5},
+    {"Name": "anneau champetre", "Id": 6791, "Slot": 2},
+    {"Name": "cape zombique", "Id": 19146, "Slot": 7},
+    {"Name": "anneau des rocheuses", "Id": 278, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "coiffe zombique", "Id": 19147, "Slot": 6},
+    {"Name": "ceinture dragocourse", "Id": 17734, "Slot": 3},
+    {"Name": "larvamulette", "Id": 7106, "Slot": 0},
+    {"Name": "epee du garde royal", "Id": 17494, "Slot": 1}
+  ],
+  "80": [
+    {"Name": "bloptes coco royales", "Id": 9164, "Slot": 5},
+    {"Name": "anneau du koalak", "Id": 8004, "Slot": 2},
+    {"Name": "cape du scorbute", "Id": 19082, "Slot": 7},
+    {"Name": "anneau du kitsou", "Id": 7341, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "casque du scorbute", "Id": 19081, "Slot": 6},
+    {"Name": "ceinture aerdala", "Id": 7241, "Slot": 3},
+    {"Name": "amublop coco", "Id": 9151, "Slot": 0},
+    {"Name": "la bidjiz", "Id": 8612, "Slot": 1}
+  ],
+  "100": [
+    {"Name": "bloptes coco royales", "Id": 9164, "Slot": 5},
+    {"Name": "anneau du koalak", "Id": 8004, "Slot": 2},
+    {"Name": "cape du scorbute", "Id": 19082, "Slot": 7},
+    {"Name": "anneau du kitsou", "Id": 7341, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "casque du scorbute", "Id": 19081, "Slot": 6},
+    {"Name": "ceinture aerdala", "Id": 7241, "Slot": 3},
+    {"Name": "amublop coco", "Id": 9151, "Slot": 0},
+    {"Name": "la bidjiz", "Id": 8612, "Slot": 1}
+  ],
+  "120": [
+    {"Name": "bottes du rat noir", "Id": 8446, "Slot": 5},
+    {"Name": "anneau du dragon cochon", "Id": 8271, "Slot": 2},
+    {"Name": "cape du scorbute", "Id": 19082, "Slot": 7},
+    {"Name": "gantelet du rat blanc", "Id": 8454, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "solomonk", "Id": 7143, "Slot": 6},
+    {"Name": "pagne du muloubar", "Id": 19092, "Slot": 3},
+    {"Name": "amulette des huit yeux", "Id": 16176, "Slot": 0},
+    {"Name": "dagues maydhyn china", "Id": 7190, "Slot": 1}
+  ],
+    "121": [
+    {"Name": "bottes du rat noir", "Id": 8446, "Slot": 5},
+    {"Name": "anneau du dragon cochon", "Id": 8271, "Slot": 2},
+    {"Name": "caracape minotoris", "Id": 2629, "Slot": 7},
+    {"Name": "gantelet du rat blanc", "Id": 8454, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "solomonk", "Id": 7143, "Slot": 6},
+    {"Name": "pagne du muloubar", "Id": 19092, "Slot": 3},
+    {"Name": "amulette des huit yeux", "Id": 16176, "Slot": 0},
+    {"Name": "dagues maydhyn china", "Id": 7190, "Slot": 1}
+  ],
+  "171": [
+    {"Name": "sandales binosse", "Id": 11619, "Slot": 5},
+    {"Name": "anneau de xlii", "Id": 15768, "Slot": 2},
+    {"Name": "caracape minotoris", "Id": 2629, "Slot": 7},
+    {"Name": "crochet de ben le ripate", "Id": 11578, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "solomonk", "Id": 7143, "Slot": 6},
+    {"Name": "ceinture de xlii", "Id": 15764, "Slot": 3},
+    {"Name": "amulette de cantile", "Id": 12095, "Slot": 0},
+    {"Name": "furibond", "Id": 12723, "Slot": 9},
+    {"Name": "dagues maydhyn china", "Id": 7190, "Slot": 1}
+  ],
+    "184": [
+    {"Name": "sandales binosse", "Id": 11619, "Slot": 5},
+    {"Name": "anneau de xlii", "Id": 15768, "Slot": 2},
+    {"Name": "caracape minotoris", "Id": 2629, "Slot": 7},
+    {"Name": "crochet de ben le ripate", "Id": 11578, "Slot": 4},
+    {"Name": "bouclier en mousse", "Id": 18659, "Slot": 15},
+    {"Name": "chapeau lisson", "Id": 11724, "Slot": 6},
+    {"Name": "ceinture de xlii", "Id": 15764, "Slot": 3},
+    {"Name": "amulette de cantile", "Id": 12095, "Slot": 0},
+    {"Name": "furibond", "Id": 12723, "Slot": 9},
+    {"Name": "dagues maydhyn china", "Id": 7190, "Slot": 1}
+  ]
+}

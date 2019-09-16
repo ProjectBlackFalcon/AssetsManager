@@ -1,0 +1,97 @@
+[
+    {
+        "id": 1,
+        "nameId": 2736,
+        "iconId": -1
+    },
+    {
+        "id": 2,
+        "nameId": 2706,
+        "iconId": 1
+    },
+    {
+        "id": 11,
+        "nameId": 524455,
+        "iconId": 10
+    },
+    {
+        "id": 13,
+        "nameId": 523974,
+        "iconId": 6
+    },
+    {
+        "id": 15,
+        "nameId": 2752,
+        "iconId": 5
+    },
+    {
+        "id": 16,
+        "nameId": 2740,
+        "iconId": 15
+    },
+    {
+        "id": 24,
+        "nameId": 2703,
+        "iconId": 13
+    },
+    {
+        "id": 26,
+        "nameId": 2770,
+        "iconId": 14
+    },
+    {
+        "id": 27,
+        "nameId": 2718,
+        "iconId": 20
+    },
+    {
+        "id": 28,
+        "nameId": 2758,
+        "iconId": 18
+    },
+    {
+        "id": 36,
+        "nameId": 2785,
+        "iconId": 30
+    },
+    {
+        "id": 41,
+        "nameId": 2733,
+        "iconId": 32
+    },
+    {
+        "id": 44,
+        "nameId": 523971,
+        "iconId": 24
+    },
+    {
+        "id": 48,
+        "nameId": 523973,
+        "iconId": 28
+    },
+    {
+        "id": 60,
+        "nameId": 523972,
+        "iconId": 40
+    },
+    {
+        "id": 62,
+        "nameId": 2782,
+        "iconId": 36
+    },
+    {
+        "id": 63,
+        "nameId": 2779,
+        "iconId": 37
+    },
+    {
+        "id": 64,
+        "nameId": 2776,
+        "iconId": 35
+    },
+    {
+        "id": 65,
+        "nameId": 2700,
+        "iconId": 34
+    }
+]
