@@ -244,6 +244,7 @@ def build_graph(map_info, worldmap, bbox):
             '-15;10': [195],
             '13;27': [111],
             '-28;-26': [554],
+            '3;-17': [2, 16, 3]
         }
     nodes_to_delete = []
     for key, node in graph.items():
