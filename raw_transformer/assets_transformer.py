@@ -51,7 +51,11 @@ if __name__ == '__main__':
         shutil.rmtree(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps')))
     except:
         pass
-    os.mkdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps')))
+
+    try:
+        os.mkdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps')))
+    except:
+        print('Directory {} alredy exists'.format(os.path.abspath(os.path.join(os.path.dirname(__file__), '.', 'partially_unpacked_maps'))))
 
     files_paths = {'d2i': [], 'd2o': [], 'd2p': [], 'ele': []}
     files = os.walk(root)
