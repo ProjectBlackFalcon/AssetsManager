@@ -108,10 +108,10 @@ def get_map_nodes(map_data):
         ok_cells = [[3, 4, 10], [6, 7, 8], [4, 5, 6], [8, 9, 10]][['n', 's', 'e', 'w'].index(direction)]
         # print(direction, edge)
         node_start = None
-        edge_cells = set([])
         for i in range(len(edge)):
             if node_start is None and edge[i] in ok_cells:
                 node_start = i
+                edge_cells = set()
                 edge_cells.add(edge_cell_to_map_cell(i, direction))
 
             if node_start is not None and edge[i] in ok_cells:
@@ -204,14 +204,6 @@ def trim_edge(current_nodes, neighbour_nodes, graph, coord_2_nodes):
             if tries == max_tries:
                 raise Exception('Unable to make map {} bijective with {} neighbour'.format(coords, direction))
                 pass
-
-
-def create_map_nodes(map_data):
-    if map_data is not None:
-        nodes = get_map_nodes(map_data)
-        add_intra_neighbours(nodes, map_data['cells'])
-        return nodes
-    return {}
 
 
 def build_graph(map_info, worldmap, bbox):
@@ -385,16 +377,16 @@ def generate():
 
 if __name__ == '__main__':
     map_info = []
-    for i in range(7):
+    for i in range(8):
         with open('../definitive_output/map_info_{}.json'.format(i), 'r') as f:
             map_info += json.load(f)
     graph = {}
-    for i in range(2):
+    for i in range(3):
         with open('../definitive_output/pathfinder_graph_{}.json'.format(i), 'r') as f:
             graph.update(json.load(f))
 
     graph = generate()
-    pos = '-28;-26'
+    pos = '4;-18'
     worldmap = 1
     for key, node in graph.items():
         if node['coord'] == pos:
