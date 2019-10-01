@@ -40,6 +40,7 @@ def generate():
                     'Stats': [(effect['effectId'], effect['diceNum'], max(effect['diceNum'], effect['diceSide'])) for effect in item['possibleEffects'] if str(effect['effectId']) in effect_id_2_name.keys() and effect_id_2_name[str(effect['effectId'])] in runes.keys()]
                 }
             except Exception:
+                print('Caught error')
                 print(traceback.format_exc())
 
     with open(os.path.abspath(os.path.join(os.path.dirname(__file__), '../definitive_output/equipments.json')), 'w', encoding="utf8") as f:

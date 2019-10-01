@@ -1,5 +1,6 @@
 import json
 import os
+import traceback
 
 
 def generate():
@@ -30,11 +31,16 @@ def generate():
     runes_stats = {}
     for item in items:
         if item['typeId'] in equip_ids:
-            output[item['id']] = {
-                'Level': item['level'],
-                'Name': names[str(item['nameId'])],
-                'Stats': [(effect['effectId'], effect['diceNum'], max(effect['diceNum'], effect['diceSide'])) for effect in item['possibleEffects'] if str(effect['effectId']) in effect_id_2_name.keys() and effect_id_2_name[str(effect['effectId'])] in runes.keys()]
-            }
+            try:
+                output[item['id']] = {
+                    'Level': item['level'],
+                    'Name': names[str(item['nameId'])],
+                    'Stats': [(effect['effectId'], effect['diceNum'], max(effect['diceNum'], effect['diceSide'])) for effect in item['possibleEffects'] if str(effect['effectId']) in effect_id_2_name.keys() and effect_id_2_name[str(effect['effectId'])] in runes.keys()]
+                }
+            except Exception:
+                print('Caught error')
+                print(traceback.format_exc())
+
         if item['id'] in runes_ids.values():
             try:
                 # print(effect_id_2_name[str(item['possibleEffects'][0]['effectId'])])
